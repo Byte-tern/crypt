@@ -200,26 +200,27 @@ fun show() {
                 val color = Color(locImage.getRGB(x, y))
                 // test location - D:\download\reaver_upper_front.png 50448
                 val b = color.blue
-                var blueByte = convToByteL8(b)
+                val blueByte = convToByteL8(b)
                 if (blueByte[7] == '1') res+='1'
                 else res +='0'
             }
         }
 
         val resultat = res.substringBefore(ENDING)
+        //println(resultat)
         if (res == resultat || resultat.length%8 != 0){
             println("Nothing is hidden here. Returning to the main menu...")
             return
         }
         var byteArr = byteArrayOf()
         val resul = decoder(convToByteL16(pwd), resultat)
-        for (index in 0..<resul.length/8){
-            val subStr = resul.substring(index, index+8)
+        for (index in 0..<(resul.length)/8){
+            val subStr = resul.substring(index*8, (index+1)*8)
             val subByte = convToIntL8(subStr)
             byteArr+=subByte.toByte()
         }
         val mes = String(byteArr)
-        println("Found message: \n\n${byteArr.joinToString()}\n")
+        println("Found message: \n\n$mes\n")
 
     } catch (e: Exception) {//55328
         println(e.message)//"Something went wrong. Returning to the menu...")
@@ -230,7 +231,7 @@ fun show() {
 fun main() {
     var f=1
     var com : String
-    println("Hello, World!".toByteArray().joinToString())
+    //println(conv("Hello, World!"))
     while(f==1) {//-116, 24, 48, 97, -61, -122, 12, 24, 48, 97, -62, -123, 10, 20, 41, 82, -92, 72, -111, 35, 71, -113, 31, 62, 125, -5, -9, -17, -34, -68, 121, -14, -27, -54, -107, 43, 86, -84, 89, -78
         print("Task (hide, show, exit):\n> ")
         //val scanner = Scanner(System.`in`)
